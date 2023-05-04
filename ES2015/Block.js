@@ -1,6 +1,12 @@
 // CommonJS module...
 // E6 Class...
 class Block {
+  // constructor({ timestamp, data, hash, lastHash }) {
+  //   this.timestamp = timestamp;
+  //   this.data = data;
+  //   this.hash = hash;
+  //   this.previousHash = lastHash;
+  // }
   constructor(timestamp, data, hash, lastHash) {
     this.timestamp = timestamp;
     this.data = data;
