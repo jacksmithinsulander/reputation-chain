@@ -1,7 +1,6 @@
 const Block = require('./Block');
 
 class BlockChain {
-  // #transactions = [];
   constructor() {
     // Dummy block som första block i kedjan...
     // Korrekta namnet är Genesis...
@@ -13,12 +12,14 @@ class BlockChain {
     );
 
     this.transactions = [genisis];
+    this.hashCounter = 1;
   }
   addBlock(data) {
-    const lastHash =
-      this.transactions[this.transactions.length - 1].currentHash;
-    const hash = `${Date.now()}#ABC`;
-    const block = new Block(data, hash, lastHash);
+    // const lastHash =
+    //   this.transactions[this.transactions.length - 1].currentHash;
+    const lastHash = this.transactions.at(-1).currentHash;
+    const hash = `${Date.now()}${this.hashCounter++}`;
+    const block = new Block(Date.now(), data, hash, lastHash);
     block.timestamp = Date.now();
     this.transactions.push(block);
   }
