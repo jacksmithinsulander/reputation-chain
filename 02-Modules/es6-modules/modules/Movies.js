@@ -1,4 +1,4 @@
-class Movie {
+export class Movie {
   constructor(movieId, title, releaseYear, description) {
     this.movieId = movieId;
     this.title = title;
@@ -9,4 +9,4 @@ class Movie {
 
 // Steg 1. Exportera klassen
 // Publicerat ett interface...
-export default Movie;
+// export default Movie;
