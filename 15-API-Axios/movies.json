@@ -1,0 +1,36 @@
+{
+  "movies": [
+    {
+      "title": "Gudfadern",
+      "id": 1
+    },
+    {
+      "id": 2,
+      "title": "Superman"
+    },
+    {
+      "id": 3,
+      "title": "The Batman"
+    },
+    {
+      "id": 4,
+      "title": "Avengers"
+    },
+    {
+      "title": "Spiderman",
+      "id": 5
+    },
+    {
+      "title": "Iron Man 3",
+      "id": 6
+    },
+    {
+      "title": "Stillwater 2",
+      "id": 7
+    },
+    {
+      "title": "John Wick",
+      "id": 8
+    }
+  ]
+}
