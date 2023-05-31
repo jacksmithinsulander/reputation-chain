@@ -4,7 +4,10 @@ const blockchain = new Blockchain();
 const times = [];
 let prevTime, nextTime, nextBlock, timeDiff, average;
 
-for (let i = 0; i < 5000; i++) {
+// blockchain.addBlock({ data: 'Dummy test data' });
+// console.log('Block One:', blockchain.chain.at(-1));
+
+for (let i = 0; i < 10000; i++) {
   prevTime = blockchain.chain.at(-1).timestamp;
 
   blockchain.addBlock({ data: `Block: ${i}` });
@@ -20,4 +23,6 @@ for (let i = 0; i < 5000; i++) {
   console.log(
     `Time it took to mine a block: ${timeDiff}ms, difficulty level: ${nextBlock.difficulty}, average time: ${average}ms`
   );
+
+  // console.log(`Block: ${i}`, blockchain.chain.at(-1));
 }

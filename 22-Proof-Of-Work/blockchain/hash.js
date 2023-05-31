@@ -1,5 +1,5 @@
 // Importera Node.js egna crypto bibliotek...
-
+// const hexToBinary = require('hex-to-binary');
 const crypto = require('crypto');
 
 const createHash = (...args) => {
@@ -10,6 +10,7 @@ const createHash = (...args) => {
   hash.update(args.sort().join(' '));
   // Beräkna värdet baserat på algoritm, inskickade argument och
   // skapa en output i hex format...
+  // return hexToBinary(hash.digest('hex'));
   return hash.digest('hex');
 };
 
