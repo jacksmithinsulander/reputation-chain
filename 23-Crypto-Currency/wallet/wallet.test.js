@@ -30,6 +30,14 @@ describe('Wallet', () => {
       ).toBe(true);
     });
 
-    it('should not verify an invalid signature', () => {});
+    it('should not verify an invalid signature', () => {
+      expect(
+        verifySignature({
+          publicKey: wallet.publicKey,
+          data,
+          signature: new Wallet().sign(data),
+        })
+      ).toBe(false);
+    });
   });
 });
