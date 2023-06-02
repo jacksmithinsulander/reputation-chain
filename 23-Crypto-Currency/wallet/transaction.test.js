@@ -60,4 +60,28 @@ describe('Transaction', () => {
       ).toBe(true);
     });
   });
+
+  describe('validate the transaction', () => {
+    describe('when the transaction is valid', () => {
+      it('should return true', () => {
+        expect(Transaction.validateTransaction(transaction)).toBe(true);
+      });
+    });
+
+    describe('when the transaction is invalid', () => {
+      describe('and a transactions outputMap is invalid', () => {
+        it('should return false', () => {
+          transaction.outputMap[sender.publicKey] = 111111111;
+          expect(Transaction.validateTransaction(transaction)).toBe(false);
+        });
+      });
+
+      describe('and a transaction input signature is invalid', () => {
+        it('should returns false', () => {
+          transaction.input.signature = new Wallet().sign('Good try!!!');
+          expect(Transaction.validateTransaction(transaction)).toBe(false);
+        });
+      });
+    });
+  });
 });

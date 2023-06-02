@@ -1,6 +1,7 @@
 const { INITIAL_BALANCE } = require('../utilities/config');
 const { ec } = require('../utilities');
 const crypto = require('../utilities/hash');
+const Transaction = require('./Transaction');
 
 class Wallet {
   constructor() {
@@ -11,6 +12,14 @@ class Wallet {
 
   sign(data) {
     return this.keyPair.sign(crypto(data));
+  }
+
+  createTransaction({ amount, recipient }) {
+    if (amount > this.balance) {
+      throw new Error('Not enough funds');
+    }
+
+    return new Transaction({ sender: this, recipient, amount });
   }
 }
 
