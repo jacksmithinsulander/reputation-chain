@@ -21,26 +21,19 @@ app.post('/api/transaction', (req, res) => {
 });
 
 app.get('/api/mine', (req, res) => {
-  // 1.   Vi måste hämta senaste blocket...
   const previousBlock = softCoin.getLastBlock();
-  // 2.   Få tag i sendaste blockets hash...
   const previousHash = previousBlock.hash;
-  // 3.   Skapa ett data objekt som innehåller
-  // 3.1  data egenskap som ska innehålla allt i utestående lista(pendingList)...
-  // 3.2  index egenskap som ger rätt index till nya blocket...
   const data = {
     data: softCoin.pendingList,
     index: previousBlock.index + 1,
   };
-  // 4.   Skapa ett (nonce) värde, proofOfWork...
   const nonce = softCoin.proofOfWork(previousHash, data);
-  // 5.   Skapa, räkna fram en hash för vårt nya block
   const hash = softCoin.createHash(previousHash, data, nonce);
-  // 6. Belöna avsändare för skapande av ett nytt block...
+
   softCoin.addTransaction(6.25, '00', nodeAddress);
-  // 7.   Anropa createBlock metoden i Blockchain...
+
   const block = softCoin.createBlock(nonce, previousHash, hash);
-  // 8.   Returnera blocket till avsändaren
+
   res.status(200).json({
     success: true,
     data: block,
@@ -53,10 +46,24 @@ app.post('/api/register-node', (req, res) => {
   // Få in en nodes unika adress(URL)...
   const url = req.body.nodeUrl; //http://localhost:3001
   // Kontrollera att vi inte redan har registrerat denna URL...
-  if (softCoin.networkNodes.indexOf(url) === -1) {
+  // Om inte registrera, dvs placera noden i vår networkNode lista...
+  if (softCoin.networkNodes.indexOf(url) === -1 && softCoin.nodeUrl !== url) {
     softCoin.networkNodes.push(url);
   }
-  // Om inte registrera, dvs placera noden i vår networkNode lista...
+
+  res.status(201).json({ success: true, data: 'Ny nod tillagd' });
+});
+
+app.post('/api/register-nodes', (req, res) => {
+  const allNodes = req.body.nodes;
+
+  allNodes.forEach((url) => {
+    if (softCoin.networkNodes.indexOf(url) === -1 && softCoin.nodeUrl !== url) {
+      softCoin.networkNodes.push(url);
+    }
+  });
+
+  res.status(201).json({ success: true, data: 'Nya noder tillagda' });
 });
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
