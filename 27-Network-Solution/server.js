@@ -1,5 +1,7 @@
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
+const fetch = require('node-fetch');
+
 const Blockchain = require('./blockchain');
 const app = express();
 
@@ -40,7 +42,41 @@ app.get('/api/mine', (req, res) => {
   });
 });
 
-// Administrativa endpoints...
+/* ----------------------------------------------------------------------------------------- */
+/* Administrativa endpoints... */
+/* ----------------------------------------------------------------------------------------- */
+
+// Registrera och skicka ut nya noder till alla noder i det befintliga nätverket...
+app.post('/api/register-broadcast-node', async (req, res) => {
+  // 1. Placera nya noden i aktuell nodes networkNodes lista...
+  const urlToAdd = req.body.nodeUrl;
+
+  if (softCoin.networkNodes.indexOf(urlToAdd) === -1) {
+    softCoin.networkNodes.push(urlToAdd);
+  }
+  // 2. Iterera igenom vår networkNodes lista och skicka till varje node
+  // i listan samma nya node
+  softCoin.networkNodes.forEach(async (url) => {
+    const body = { nodeUrl: urlToAdd };
+
+    await fetch(`${url}/api/register-node`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' },
+    });
+  });
+  // 3. Uppdatera nya noden med samma noder som vi har i nätverket...
+  const body = { nodes: [...softCoin.networkNodes, softCoin.nodeUrl] };
+
+  await fetch(`${urlToAdd}/api/register-nodes`, {
+    method: 'POST',
+    body: JSON.stringify(body),
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  res.status(201).json({ success: true, data: 'Ny nod tillagd i nätverket.' });
+});
+
 // Registrera enskild node
 app.post('/api/register-node', (req, res) => {
   // Få in en nodes unika adress(URL)...
@@ -54,6 +90,7 @@ app.post('/api/register-node', (req, res) => {
   res.status(201).json({ success: true, data: 'Ny nod tillagd' });
 });
 
+// Registrera en lista med noder...
 app.post('/api/register-nodes', (req, res) => {
   const allNodes = req.body.nodes;
 
