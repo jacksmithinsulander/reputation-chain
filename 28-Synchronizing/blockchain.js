@@ -35,6 +35,44 @@ Blockchain.prototype.getLastBlock = function () {
   return this.chain.at(-1);
 };
 
+/* ------------ Consensus ------------ */
+// Validera blockkedjan...
+Blockchain.prototype.validateChain = function (chain) {
+  let isValid = true;
+
+  for (i = 1; i < chain.length; i++) {
+    const block = chain[i];
+    const previousBlock = chain[i - 1];
+    const hash = this.createHash(previousBlock.hash, { data: block.data, index: block.index }, block.nonce);
+
+    // if (hash.substring(0, 4) !== '0000') {
+    //   isValid = false;
+    // }
+
+    if (hash !== block.hash) {
+      isValid = false;
+    }
+
+    if (block.previousHash !== previousBlock.hash) {
+      isValid = false;
+    }
+  }
+
+  // Validera genesis blocket...
+  const genesisBlock = chain.at(0);
+  const isGenesisNonceValid = genesisBlock.nonce === 1;
+  const isGenesisHashValid = genesisBlock.hash === 'Genisis';
+  const isGenesisPreviousHashValid = genesisBlock.previousHash === 'Genisis';
+  const hasNoData = genesisBlock.data.length === 0;
+
+  if (!isGenesisNonceValid || !isGenesisHashValid || !isGenesisPreviousHashValid || !hasNoData) {
+    isValid = false;
+  }
+
+  return isValid;
+};
+/* ------------------------------------------------- */
+
 // Funktion för att lägga till data i pendingList...
 Blockchain.prototype.addTransaction = function (amount, sender, recipient) {
   const transaction = {
@@ -45,12 +83,14 @@ Blockchain.prototype.addTransaction = function (amount, sender, recipient) {
   };
 
   return transaction;
+  // this.pendingList.push(data);
+
+  // return this.getLastBlock()['index'] + 1;
 };
 
-// Funktion som adderar en transaktion till utestående transaktion(pendingList)...
 Blockchain.prototype.addTransactionToPendingList = function (transaction) {
   this.pendingList.push(transaction);
-  return this.getLastBlock()['index'] + 1;
+  return this.getLastBlock().index + 1;
 };
 
 // Skapa ett hash värde...
