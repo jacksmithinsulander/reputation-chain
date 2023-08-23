@@ -15,6 +15,7 @@ app.use(express.json());
 
 app.get('/api/blockchain', (req, res) => {
   res.status(200).json({ success: true, data: softCoin });
+  // res.json(softCoin); Gör inte så här!!!
 });
 
 app.post('/api/transaction', (req, res) => {
@@ -130,6 +131,37 @@ app.post('/api/register-nodes', (req, res) => {
   });
 
   res.status(201).json({ success: true, data: 'Nya noder tillagda' });
+});
+
+/* CONSENSUS ENDPOINT */
+app.get('/api/consensus', (req, res) => {
+  const currentChainLength = softCoin.chain.length;
+  let maxLength = currentChainLength;
+  let longestChain = null;
+  let pendingList = null;
+
+  // Iterera igenom alla noder i nätverket som finns upplagda på aktuell node...
+  softCoin.networkNodes.forEach((node) => {
+    console.log('Node: ', node);
+
+    axios(`${node}/api/blockchain`).then((data) => {
+      console.log('Data ifrån axios: ', data);
+
+      if (data.data.data.chain.length > maxLength) {
+        maxLength = data.data.data.chain.length;
+        longestChain = data.data.data.chain;
+        pendingList = data.data.data.pendingList;
+      }
+
+      if (!longestChain || (longestChain && !softCoin.validateChain(longestChain))) {
+        console.log('No replacement needed');
+      } else {
+        softCoin.chain = longestChain;
+        softCoin.pendingList = pendingList;
+        res.status(200).json({ success: true, data: softCoin });
+      }
+    });
+  });
 });
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
