@@ -1,12 +1,17 @@
+type Transaction = { 
+    sender: string,
+    recipient: string,
+    amount: number
+};
+
 type Block = {
     index: number,
     timestamp: number,
-    data: string,
+    data: Transaction[],
     nonce: number,
     hash: string,
     previousHash: string
 };
-
 
 function Blockchain() {
     this.chain = [];
