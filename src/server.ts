@@ -47,5 +47,12 @@ app.get('/api/mine', (req: Request, res: Response) => {
     });
 });
 
+app.post('/api/register-node', (req: Request, res: Response) => {
+    const url: string = req.body.nodeUrl;
+    if (reputationChain.networkNode.indexOf(url) == -1) {
+        reputationChain.networkNode.push(url)
+    }
+});
+
 app.listen(3000, () => console.log("Server is running on port 3000"));
 

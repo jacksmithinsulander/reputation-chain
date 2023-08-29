@@ -18,6 +18,9 @@ export type Block = {
 function Blockchain() {
     this.chain = [] as Block[];
     this.pendingList = [] as Transaction[];
+    this.nodeUrl = '';
+    this.networkNodes = [];
+
     this.createBlock(1, 'Genesis', 'Genesis');
 };
 
