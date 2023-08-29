@@ -1,9 +1,12 @@
 import express, { Request, Response } from 'express';
+import { v4 as uuidv4} from 'uuid';
 import Blockchain, { Block, Transaction} from './blockchain.js';
 
 const app = express();
 
 const reputationChain = new Blockchain();
+
+const nodeAddress = uuidv4().split('-').join('');
 
 app.use(express.json());
 
@@ -33,13 +36,15 @@ app.get('/api/mine', (req: Request, res: Response) => {
     }
     const nonce: number = reputationChain.proofOfWork(previousHash, data);
     const hash: string = reputationChain.createHash(previousHash, data, nonce);
+    
+    reputationChain.addTransaction(4.20, '00', nodeAddress);
+
     const block: Block = reputationChain.createBlock(nonce, previousHash, hash);
 
     res.status(200).json({
         success: true,
         data: block
     });
-
 });
 
 app.listen(3000, () => console.log("Server is running on port 3000"));
