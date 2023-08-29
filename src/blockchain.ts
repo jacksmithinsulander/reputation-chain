@@ -1,12 +1,12 @@
 import sha256 from 'sha256';
 
-type Transaction = { 
+export type Transaction = { 
     sender: string,
     recipient: string,
     amount: number
 };
 
-type Block = {
+export type Block = {
     index: number,
     timestamp: number,
     data: Transaction[],
