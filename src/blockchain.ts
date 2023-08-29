@@ -1,3 +1,5 @@
+import sha256 from 'sha256';
+
 type Transaction = { 
     sender: string,
     recipient: string,
@@ -14,8 +16,8 @@ type Block = {
 };
 
 function Blockchain() {
-    this.chain = [];
-    this.pendingList = [];
+    this.chain = [] as Block[];
+    this.pendingList = [] as Transaction[];
 };
 
 Blockchain.prototype.createBlock = function(
@@ -52,6 +54,17 @@ Blockchain.prototype.addTransaction = function(
     }
     this.pendingList.push(newTransaction);
     return this.getLastBlock()['index'] + 1;
+}
+
+Blockchain.prototype.createHash = function(
+    previousHash: string,
+    data: Transaction[],
+    nonce: number
+): string {
+    const stringToHash: string = previousHash + 
+        JSON.stringify(data) + nonce.toString();
+    const hash = sha256(stringToHash)
+    return hash;
 }
 
 export default Blockchain;
