@@ -7,9 +7,9 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "node-1": "nodemon dist/server.js 3000 http://lovalhost:3000",
-    "node-2": "nodemon dist/server.js 3001 http://lovalhost:3001",
-    "node-3": "nodemon dist/server.js 3002 http://lovalhost:3002",
+    "node-1": "nodemon dist/server.js 3000 http://localhost:3000",
+    "node-2": "nodemon dist/server.js 3001 http://localhost:3001",
+    "node-3": "nodemon dist/server.js 3002 http://localhost:3002",
     "dev": "nodemon --watch dist/server.js"
   },
   "keywords": [],

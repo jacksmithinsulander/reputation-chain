@@ -50,11 +50,17 @@ app.get('/api/mine', (req: Request, res: Response) => {
 });
 
 app.post('/api/register-node', (req: Request, res: Response) => {
-    const url: string = req.body.nodeUrl;
-    if (reputationChain.networkNode.indexOf(url) == -1) {
-        reputationChain.networkNode.push(url)
-    }
+    const allNodes: string[] = req.body.nodes;
+
+    allNodes.forEach((url: string) => {
+        if (reputationChain.networkNodes.indexOf(url) === -1 && reputationChain.nodeUrl !== url) {
+            reputationChain.networkNodes.push(url);
+        }
+    });
+
+    res.status(201).json({ success: true, data: 'New nodes added' });
 });
+
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
