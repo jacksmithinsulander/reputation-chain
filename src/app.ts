@@ -21,12 +21,13 @@ const data = [
     }
 ];
 
-const nonce = 100;
+//const nonce = 100;
 
-const hash = myChain.createHash(prevHash, data, nonce);
-console.log(hash)
+//const hash = myChain.createHash(prevHash, data, nonce);
+//console.log(hash)
 
-
+const nonce = myChain.proofOfWork(prevHash, data);
+console.log(nonce)
 
 
 

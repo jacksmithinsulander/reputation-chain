@@ -67,4 +67,19 @@ Blockchain.prototype.createHash = function(
     return hash;
 }
 
+Blockchain.prototype.proofOfWork = function(
+    previousHash: string,
+    data: Transaction[]
+): number {
+    let nonce: number = 0;
+    let hash: string = this.createHash(previousHash, data, nonce);
+
+    while(hash.substring(0,4) != '0000') {
+        nonce++;
+        hash = this.createHash(previousHash, data, nonce);
+        console.log(hash);
+    };
+    return nonce;
+}
+
 export default Blockchain;
