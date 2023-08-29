@@ -15,7 +15,7 @@ app.post('/api/transaction', (req: Request, res: Response) => {
         req.body.sender,
         req.body.recipient
     );
-    res.status(201).json({success: true, data: `Block Index: {index}`});
+    res.status(201).json({success: true, data: `Block Index: $${index}`});
 });
 
 app.get('/api/mine', (req: Request, res: Response) => {})
