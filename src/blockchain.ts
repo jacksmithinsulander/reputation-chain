@@ -36,4 +36,4 @@ Blockchain.prototype.createBlock = function(
     return newBlock;
 };
 
-module.exports = Blockchain;
+export default Blockchain;
