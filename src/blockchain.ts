@@ -18,6 +18,7 @@ type Block = {
 function Blockchain() {
     this.chain = [] as Block[];
     this.pendingList = [] as Transaction[];
+    this.createBlock(1, 'Genesis', 'Genesis');
 };
 
 Blockchain.prototype.createBlock = function(
@@ -74,7 +75,7 @@ Blockchain.prototype.proofOfWork = function(
     let nonce: number = 0;
     let hash: string = this.createHash(previousHash, data, nonce);
 
-    while(hash.substring(0,4) != '0000') {
+    while(hash.substring(0,4) != '1337') {
         nonce++;
         hash = this.createHash(previousHash, data, nonce);
         console.log(hash);
