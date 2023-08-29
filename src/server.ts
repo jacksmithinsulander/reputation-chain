@@ -1,12 +1,14 @@
 import express, { Request, Response } from 'express';
-import { v4 as uuidv4} from 'uuid';
-import Blockchain, { Block, Transaction} from './blockchain.js';
+import { v4 as uuidv4 } from 'uuid';
+import Blockchain, { Block, Transaction } from './blockchain.js';
 
 const app = express();
 
 const reputationChain = new Blockchain();
 
-const nodeAddress = uuidv4().split('-').join('');
+const PORT: string = process.argv[2];
+
+const nodeAddress: string = uuidv4().split('-').join('');
 
 app.use(express.json());
 
@@ -16,11 +18,11 @@ app.get('/api/blockchain', (req: Request, res: Response) => {
 
 app.post('/api/transaction', (req: Request, res: Response) => {
     const index: Block = reputationChain.addTransaction(
-        req.body.amount, 
+        req.body.amount,
         req.body.sender,
         req.body.recipient
     );
-    res.status(201).json({success: true, data: `Block Index: ${index}`});
+    res.status(201).json({ success: true, data: `Block Index: ${index}` });
 });
 
 app.get('/api/mine', (req: Request, res: Response) => {
@@ -36,7 +38,7 @@ app.get('/api/mine', (req: Request, res: Response) => {
     }
     const nonce: number = reputationChain.proofOfWork(previousHash, data);
     const hash: string = reputationChain.createHash(previousHash, data, nonce);
-    
+
     reputationChain.addTransaction(4.20, '00', nodeAddress);
 
     const block: Block = reputationChain.createBlock(nonce, previousHash, hash);
@@ -54,5 +56,5 @@ app.post('/api/register-node', (req: Request, res: Response) => {
     }
 });
 
-app.listen(3000, () => console.log("Server is running on port 3000"));
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
