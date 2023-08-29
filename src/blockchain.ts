@@ -36,4 +36,8 @@ Blockchain.prototype.createBlock = function(
     return newBlock;
 };
 
+Blockchain.prototype.getLastBlock = function(): Block {
+    return this.chain.at(-1);
+};
+
 export default Blockchain;
