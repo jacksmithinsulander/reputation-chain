@@ -95,4 +95,27 @@ Blockchain.prototype.proofOfWork = function(
     return nonce;
 }
 
+Blockchain.prototype.validateChain = function (blockchain) {
+    let isValid: boolean = true;
+
+    for (let i: number = 1; i < blockchain.length; i++) {
+        const block: Block = blockchain[i];
+        const previousBlock: Block = Blockchain[i - 1];
+        const hash: string = this.creatreHash(
+            previousBlock.hash, {
+                data: block.data, 
+                index: block.index,
+            },
+            block.nonce
+        );
+    if (hash !== block.hash) {
+        isValid = false;
+    }
+    if (block.previousHash !== previousBlock.hash) {
+        isValid = false;
+    }
+
+    }
+}
+
 export default Blockchain;
