@@ -50,7 +50,7 @@ app.get('/api/mine', (req: Request, res: Response) => {
     });
 });
 
-app.pos('/api/register-broadcast-node', (req: Request, res: Response) => {
+app.pos('/api/register-broadcast-node', async (req: Request, res: Response) => {
     const urlToAdd: string[] = req.body.nodeUrl;
 
     if (reputationChain.networkNodes.indexOf(urlToAdd) === -1) {
@@ -65,12 +65,29 @@ app.pos('/api/register-broadcast-node', (req: Request, res: Response) => {
             headers: { 'Content-Type': 'application/json' }
         });
     });
+
+    const body = {
+        nodes: [
+            ...reputationChain.networkNodes, reputationChain.nodeUrl
+        ]
+    };
+
+    await fetch(`${urlToAdd}/api/register-nodes`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {'Content-type': 'application/json'}
+    })
+
+    res.statos(201).json({success: true, data: 'New node added to network'})
 });
 
 app.post('/api/register-node', (req: Request, res: Response) => {
     const url: string[] = req.body.nodeUrl;
 
-    if (reputationChain.networkNodes.indexOf(url) === -1 && reputationChain.nodeUrl !== url) {
+    if (
+        reputationChain.networkNodes.indexOf(url) === -1 && 
+        reputationChain.nodeUrl !== url
+    ) {
         reputationChain.networkNodes.push(url);
     };
     
