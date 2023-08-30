@@ -50,15 +50,13 @@ app.get('/api/mine', (req: Request, res: Response) => {
 });
 
 app.post('/api/register-node', (req: Request, res: Response) => {
-    const allNodes: string[] = req.body.nodes;
+    const url: string[] = req.body.nodeUrl;
 
-    allNodes.forEach((url: string) => {
-        if (reputationChain.networkNodes.indexOf(url) === -1 && reputationChain.nodeUrl !== url) {
-            reputationChain.networkNodes.push(url);
-        }
-    });
-
-    res.status(201).json({ success: true, data: 'New nodes added' });
+    if (reputationChain.networkNodes.indexOf(url) === -1 && reputationChain.nodeUrl !== url) {
+        reputationChain.networkNodes.push(url);
+    }
+    
+        res.status(201).json({ success: true, data: 'New nodes added' });
 });
 
 
