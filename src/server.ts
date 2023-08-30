@@ -151,7 +151,34 @@ app.post('/api/register-nodes', (req: Request, res: Response) => {
 });
 
 app.get('/api/consensus', (req: Request, res: Response) => {
-    res.status(200).json({success:true, data: 'Works'})
+    const currentChainLength: number = reputationChain.chain.length;
+    let maxLength: number = currentChainLength;
+    let longestChain = null;
+    let pendingList: Transaction[] = null;
+
+    reputationChain.networkNodes.forEach((node: any) => {
+        console.log('Node: ', node);
+        axios(`${node}/api/blockchain`).then(data => {
+            console.log('Data from axios: ', data);
+            res.status(201).json({ success: true, data: 'Working' });
+            if (data.data.data.chain.length > maxLength) {
+                maxLength = data.data.data.chain.length;
+                longestChain = data.data.data.chain;
+                pendingList = data.data.data.pendingList;   
+            };
+
+            if (
+                !longestChain || 
+                (
+                    longestChain && !reputationChain.calidateChain(
+                        longestChain
+                    )
+                )
+            ) {
+               console.log('No replacement needed'); 
+            }
+        });
+    });
 });
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
