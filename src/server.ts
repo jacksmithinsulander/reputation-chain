@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import Blockchain, { Block, Transaction } from './blockchain.js';
 import fetch from 'node-fetch';
+import axios from 'axios';
 
 const app = express();
 
@@ -22,9 +23,17 @@ app.post('/api/transaction/broadcast', (req: Request, res: Response) => {
         req.body.amount, req.body.sender, req.body.recipient
     );
     reputationChain.addTransactionToPendingList(transaction);
+    reputationChain.networkNodes.forEach(async(url) => {
+        await axios.post(`${url}/api/transaction`, transaction);
+    })
+    res.status(201).json({success: true, data: 'Transaction finalized'});
 });
 
 app.post('/api/transaction', (req: Request, res: Response) => {
+    const transaction: Transaction = req.body;
+    const index: Block = reputationChain.
+        addTransactionToPendingList(transaction);
+    res.status(201).json({success: true, data: index})
 });
 
 app.get('/api/mine', (req: Request, res: Response) => {
@@ -51,7 +60,7 @@ app.get('/api/mine', (req: Request, res: Response) => {
     });
 });
 
-app.pos('/api/register-broadcast-node', async (req: Request, res: Response) => {
+app.post('/api/register-broadcast-node', async (req: Request, res: Response) => {
     const urlToAdd: string[] = req.body.nodeUrl;
 
     if (reputationChain.networkNodes.indexOf(urlToAdd) === -1) {
@@ -79,7 +88,7 @@ app.pos('/api/register-broadcast-node', async (req: Request, res: Response) => {
         headers: {'Content-type': 'application/json'}
     })
 
-    res.statos(201).json({success: true, data: 'New node added to network'})
+    res.status(201).json({success: true, data: 'New node added to network'})
 });
 
 app.post('/api/register-node', (req: Request, res: Response) => {
