@@ -1,9 +1,11 @@
 import sha256 from 'sha256';
+import { v4 as uuidv4 } from 'uuid';
 
 export type Transaction = { 
     sender: string,
     recipient: string,
-    amount: number
+    amount: number,
+    transactionId: string
 };
 
 export type Block = {
@@ -50,15 +52,20 @@ Blockchain.prototype.addTransaction = function(
     amount: number,
     sender: string,
     recipient: string
-): Block {
+): Transaction {
     const newTransaction: Transaction = {
         amount,
         sender,
-        recipient
+        recipient,
+        transactionId: uuidv4().split('-').join(''),
     }
-    this.pendingList.push(newTransaction);
-    return this.getLastBlock()['index'] + 1;
+   return newTransaction;
 }
+
+Blockchain.prototype.addTransactionToPendingList = function(transaction: Transaction): Block {
+    this.pendingList.push(transaction);
+    return this.getLastBlock()['index'] + 1;
+} 
 
 Blockchain.prototype.createHash = function(
     previousHash: string,

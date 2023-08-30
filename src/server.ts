@@ -99,13 +99,15 @@ app.post('/api/register-nodes', (req: Request, res: Response) => {
     const allNodes: string[] = req.body.nodes;
   
     allNodes.forEach((url) => {
-      if (reputationChain.networkNodes.indexOf(url) === -1 && reputationChain.nodeUrl !== url) {
-        reputationChain.networkNodes.push(url);
-      }
-    });
-  
+        if (
+            reputationChain.networkNodes.indexOf(url) === -1 &&
+            reputationChain.nodeUrl !== url
+        ) {
+            reputationChain.networkNodes.push(url);
+        }
+    });  
     res.status(201).json({ success: true, data: 'Nya noder tillagda' });
-  });
+});
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
