@@ -62,7 +62,9 @@ Blockchain.prototype.addTransaction = function(
    return newTransaction;
 }
 
-Blockchain.prototype.addTransactionToPendingList = function(transaction: Transaction): Block {
+Blockchain.prototype.addTransactionToPendingList = function(
+    transaction: Transaction
+): Block {
     this.pendingList.push(transaction);
     return this.getLastBlock()['index'] + 1;
 } 

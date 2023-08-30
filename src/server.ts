@@ -17,13 +17,14 @@ app.get('/api/blockchain', (req: Request, res: Response) => {
     res.status(200).json(reputationChain);
 });
 
-app.post('/api/transaction', (req: Request, res: Response) => {
-    const index: Block = reputationChain.addTransaction(
-        req.body.amount,
-        req.body.sender,
-        req.body.recipient
+app.post('/api/transaction/broadcast', (req: Request, res: Response) => {
+    const transaction: Transaction = reputationChain.addTransaction(
+        req.body.amount, req.body.sender, req.body.recipient
     );
-    res.status(201).json({ success: true, data: `Block Index: ${index}` });
+    reputationChain.addTransactionToPendingList(transaction);
+});
+
+app.post('/api/transaction', (req: Request, res: Response) => {
 });
 
 app.get('/api/mine', (req: Request, res: Response) => {
