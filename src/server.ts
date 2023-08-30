@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import Blockchain, { Block, Transaction } from './blockchain.js';
+import fetch from 'node-fetch';
 
 const app = express();
 
@@ -49,16 +50,45 @@ app.get('/api/mine', (req: Request, res: Response) => {
     });
 });
 
+app.pos('/api/register-broadcast-node', (req: Request, res: Response) => {
+    const urlToAdd: string[] = req.body.nodeUrl;
+
+    if (reputationChain.networkNodes.indexOf(urlToAdd) === -1) {
+        reputationChain.networkNodes.push(urlToAdd);
+    };
+
+    reputationChain.networkNodes.forEach(async(url) => {
+        const body = { nodeUrl: urlToAdd };
+        await fetch(`${url}/api/register-node`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: { 'Content-Type': 'application/json' }
+        });
+    });
+});
+
 app.post('/api/register-node', (req: Request, res: Response) => {
     const url: string[] = req.body.nodeUrl;
 
     if (reputationChain.networkNodes.indexOf(url) === -1 && reputationChain.nodeUrl !== url) {
         reputationChain.networkNodes.push(url);
-    }
+    };
     
-        res.status(201).json({ success: true, data: 'New nodes added' });
+    res.status(201).json({ success: true, data: 'New nodes added' });
 });
 
+
+app.post('/api/register-nodes', (req: Request, res: Response) => {
+    const allNodes: string[] = req.body.nodes;
+  
+    allNodes.forEach((url) => {
+      if (reputationChain.networkNodes.indexOf(url) === -1 && reputationChain.nodeUrl !== url) {
+        reputationChain.networkNodes.push(url);
+      }
+    });
+  
+    res.status(201).json({ success: true, data: 'Nya noder tillagda' });
+  });
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
