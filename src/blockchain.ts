@@ -95,7 +95,7 @@ Blockchain.prototype.proofOfWork = function(
     return nonce;
 }
 
-Blockchain.prototype.validateChain = function (blockchain) {
+Blockchain.prototype.validateChain = function (blockchain: any): boolean {
     let isValid: boolean = true;
 
     for (let i: number = 1; i < blockchain.length; i++) {
@@ -108,14 +108,29 @@ Blockchain.prototype.validateChain = function (blockchain) {
             },
             block.nonce
         );
-    if (hash !== block.hash) {
-        isValid = false;
-    }
-    if (block.previousHash !== previousBlock.hash) {
-        isValid = false;
-    }
+        if (hash !== block.hash) {
+            isValid = false;
+        };
+        if (block.previousHash !== previousBlock.hash) {
+            isValid = false;
+        };
+    };
+    const genesisBlock = blockchain.at(0);
+    const isGenesisNonceValid: boolean = genesisBlock.nonce === 1;
+    const isGenesisHashValid: boolean = genesisBlock.hash === 'Genesis';
+    const isGenesisPreviousHashValid: boolean = genesisBlock.
+        previousHash === 'Genesis';
+    const hasNoData: boolean = genesisBlock.data.lenth === 0;
 
-    }
-}
+    if (
+        !isGenesisNonceValid || 
+        !isGenesisHashValid || 
+        !isGenesisPreviousHashValid || 
+        !hasNoData
+    ) {
+        isValid = false;
+    };
+    return isValid;
+};
 
 export default Blockchain;
