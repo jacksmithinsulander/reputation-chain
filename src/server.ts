@@ -8,7 +8,7 @@ const app = express();
 
 const reputationChain = new Blockchain();
 
-const PORT: string = process.argv[2];
+const PORT: number = parseInt(process.argv[2], 10);
 
 const nodeAddress: string = uuidv4().split('-').join('');
 
@@ -54,10 +54,33 @@ app.get('/api/mine', (req: Request, res: Response) => {
 
     const block: Block = reputationChain.createBlock(nonce, previousHash, hash);
 
+    reputationChain.networkNodes.forEach(async(url) => {
+        await axios.post(`${url}/api/block`, { block: block });
+    });
+
     res.status(200).json({
         success: true,
         data: block
     });
+});
+
+app.post('/api/block', (req: Request, res: Response) => {
+    const block: Block = req.body.block;
+    const lastBlock: Block = reputationChain.getLastBlock();
+    const hashIsCorrect: boolean = lastBlock.hash === block.previousHash;
+    const hasCorrectIndex: boolean = lastBlock.index + 1 === block.index;
+
+    if (hashIsCorrect && hasCorrectIndex)  {
+        reputationChain.chain.push(block);
+        reputationChain.pendingList = [];
+        res.status(201).json({ success: true, data: block });
+    } else {
+        res.status(400).json(
+            { 
+                success: false, errorMessage: 'Declined block'
+            }
+        ); 
+    };
 });
 
 app.post('/api/register-broadcast-node', async (req: Request, res: Response) => {
@@ -120,4 +143,3 @@ app.post('/api/register-nodes', (req: Request, res: Response) => {
 });
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
-
