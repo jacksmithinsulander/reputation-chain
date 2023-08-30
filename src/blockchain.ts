@@ -101,7 +101,7 @@ Blockchain.prototype.validateChain = function (blockchain: any): boolean {
     for (let i: number = 1; i < blockchain.length; i++) {
         const block: Block = blockchain[i];
         const previousBlock: Block = Blockchain[i - 1];
-        const hash: string = this.creatreHash(
+        const hash: string = this.createHash(
             previousBlock.hash, {
                 data: block.data, 
                 index: block.index,

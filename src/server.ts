@@ -150,4 +150,8 @@ app.post('/api/register-nodes', (req: Request, res: Response) => {
     res.status(201).json({ success: true, data: 'Nya noder tillagda' });
 });
 
+app.get('/api/consensus', (req: Request, res: Response) => {
+    res.status(200).json({success:true, data: 'Works'})
+});
+
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
