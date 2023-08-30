@@ -36,7 +36,7 @@ app.post('/api/transaction', (req: Request, res: Response) => {
     res.status(201).json({success: true, data: index})
 });
 
-app.get('/api/mine', (req: Request, res: Response) => {
+app.get('/api/mine', async (req: Request, res: Response) => {
     const previousBlock: Block = reputationChain.getLastBlock();
     const previousHash: string = previousBlock.hash;
     type data = {
@@ -50,13 +50,21 @@ app.get('/api/mine', (req: Request, res: Response) => {
     const nonce: number = reputationChain.proofOfWork(previousHash, data);
     const hash: string = reputationChain.createHash(previousHash, data, nonce);
 
-    reputationChain.addTransaction(4.20, '00', nodeAddress);
-
-    const block: Block = reputationChain.createBlock(nonce, previousHash, hash);
+    const block: Block = reputationChain.
+        createBlock(nonce, previousHash, hash);
 
     reputationChain.networkNodes.forEach(async(url) => {
         await axios.post(`${url}/api/block`, { block: block });
     });
+
+    await axios.post(
+        `${reputationChain.nodeUrl}/api/transaction/broadcast`,
+        {
+            amount: 4.20,
+            sender: '00',
+            recipient: nodeAddress
+        }
+    );
 
     res.status(200).json({
         success: true,
