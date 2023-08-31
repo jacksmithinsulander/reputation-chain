@@ -32,10 +32,18 @@ app.post('/api/transaction/broadcast', (req: Request, res: Response) => {
 });
 
 app.post('/api/transaction', (req: Request, res: Response) => {
-    const transaction: Transaction = req.body;
-    const index: Block = reputationChain.
-        addTransactionToPendingList(transaction);
-    res.status(201).json({success: true, data: index})
+    if (req.body.rating <= 10) {
+        const transaction: Transaction = req.body;
+        const index: Block = reputationChain.
+            addTransactionToPendingList(transaction);
+        res.status(201).json({success: true, data: index})
+    } else {
+        res.status(404).json({
+            status: 404,
+            success: false, 
+            data: 'Not a valid ratingnumber'
+        })
+    }
 });
 
 app.get('/api/mine', async (req: Request, res: Response) => {
@@ -207,7 +215,14 @@ app.get('/api/transactions/:address', (req: Request, res: Response) => {
     const result: { 
         socialCredit: string, transactions: Transaction[] 
     } = reputationChain.listTransactions(req.params.address);
-    res.status(200).json({success:true, data: result });
+    res.status(200).json({success:true, data: result.transactions });
+})
+
+app.get('/api/checkSocialCredit/:address', (req: Request, res: Response) => {
+    const result: { 
+        socialCredit: string, transactions: Transaction[] 
+    } = reputationChain.listTransactions(req.params.address);
+    res.status(200).json({success:true, data: result.socialCredit });
 })
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
