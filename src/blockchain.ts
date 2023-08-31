@@ -156,7 +156,7 @@ Blockchain.prototype.findTransaction = function(transactionId: string): {
     }
 }
 Blockchain.prototype.listTransactions = function(address: string): {
-    score: number, transactions: Transaction[]
+    socialCredit: number, transactions: Transaction[]
 } {
     const transactions: Transaction[] = [];
     
@@ -176,16 +176,16 @@ Blockchain.prototype.listTransactions = function(address: string): {
         scoreList.push(transaction.rating);
     });
 
-    let score: number;
+    let socialCredit: number;
 
     if (scoreList.length === 0) {
-        score = 0;
+        socialCredit = 0;
     } else {
         const sum: number = scoreList.reduce((acc, num) => acc + num, 0);
-        score = sum / scoreList.length;
+        socialCredit = sum / scoreList.length;
     }
 
-    return { score, transactions };
+    return { socialCredit, transactions };
 };
 
 export default Blockchain;

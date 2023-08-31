@@ -205,7 +205,7 @@ app.get('/api/transaction/:id', (req: Request, res: Response) => {
 
 app.get('/api/transactions/:address', (req: Request, res: Response) => {
     const result: { 
-        score: string, transactions: Transaction[] 
+        socialCredit: string, transactions: Transaction[] 
     } = reputationChain.listTransactions(req.params.address);
     res.status(200).json({success:true, data: result });
 })
