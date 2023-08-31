@@ -155,33 +155,37 @@ Blockchain.prototype.findTransaction = function(transactionId: string): {
         return { transaction, block }
     }
 }
-
 Blockchain.prototype.listTransactions = function(address: string): {
     score: number, transactions: Transaction[]
 } {
-    let score: number; //= 0;
     const transactions: Transaction[] = [];
     
-    this.chain.forEach((block: Block) =>  {
+    this.chain.forEach((block: Block) => {
         block.data.forEach((transaction: Transaction) => {
             if (
                 transaction.sender === address || transaction.recipient === address
             ) {
                 transactions.push(transaction);
-            };
+            }
         });
     });
 
-    //this is where I want to implement my system later on
+    const scoreList: number[] = [];
+
     transactions.forEach((transaction: Transaction) => {
-        if (transaction.recipient === address) {
-            score += transaction.rating;
-        } else if (transaction.sender === address) {
-            score -= transaction.rating;
-        }
+        scoreList.push(transaction.rating);
     });
 
-    return { score, transactions};
+    let score: number;
+
+    if (scoreList.length === 0) {
+        score = 0;
+    } else {
+        const sum: number = scoreList.reduce((acc, num) => acc + num, 0);
+        score = sum / scoreList.length;
+    }
+
+    return { score, transactions };
 };
 
 export default Blockchain;
