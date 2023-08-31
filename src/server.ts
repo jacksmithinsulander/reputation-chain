@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import Blockchain, { Block, Transaction } from './blockchain.js';
-import fetch from 'node-fetch';
 import axios from 'axios';
 
 const app = express();
@@ -87,16 +86,16 @@ app.post('/api/register-broadcast-node', async (req: Request, res: Response) => 
 
     if (reputationChain.networkNodes.indexOf(urlToAdd) === -1) {
         reputationChain.networkNodes.push(urlToAdd);
-    };
+    }
 
-    reputationChain.networkNodes.forEach(async(url: string) => {
+    const registerNodePromises = reputationChain.networkNodes.map(async (url: string) => {
         const body = { nodeUrl: urlToAdd };
-        await fetch(`${url}/api/register-node`, {
-            method: 'POST',
-            body: JSON.stringify(body),
+        await axios.post(`${url}/api/register-node`, body, {
             headers: { 'Content-Type': 'application/json' }
         });
     });
+
+    await Promise.all(registerNodePromises);
 
     const body = {
         nodes: [
@@ -104,13 +103,11 @@ app.post('/api/register-broadcast-node', async (req: Request, res: Response) => 
         ]
     };
 
-    await fetch(`${urlToAdd}/api/register-nodes`, {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {'Content-type': 'application/json'}
-    })
+    await axios.post(`${urlToAdd}/api/register-nodes`, body, {
+        headers: {'Content-Type': 'application/json'}
+    });
 
-    res.status(201).json({success: true, data: 'New node added to network'})
+    res.status(201).json({success: true, data: 'New node added to network'});
 });
 
 app.post('/api/register-node', (req: Request, res: Response) => {
