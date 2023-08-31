@@ -25,7 +25,10 @@ app.post('/api/transaction/broadcast', (req: Request, res: Response) => {
     reputationChain.networkNodes.forEach(async(url) => {
         await axios.post(`${url}/api/transaction`, transaction);
     })
-    res.status(201).json({success: true, data: 'Transaction finalized'});
+    res.status(201).json({
+        success: true, 
+        data: 'Transaction added to mempool'
+    });
 });
 
 app.post('/api/transaction', (req: Request, res: Response) => {
