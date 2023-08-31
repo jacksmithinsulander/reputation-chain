@@ -20,7 +20,7 @@ app.get('/api/blockchain', (req: Request, res: Response) => {
 app.post('/api/transaction/broadcast', (req: Request, res: Response) => {
     if (req.body.rating <= 10) {
         const transaction: Transaction = reputationChain.addTransaction(
-            req.body.amount, req.body.sender, req.body.recipient
+            req.body.rating, req.body.sender, req.body.recipient
         );
         reputationChain.addTransactionToPendingList(transaction);
         reputationChain.networkNodes.forEach(async(url) => {
