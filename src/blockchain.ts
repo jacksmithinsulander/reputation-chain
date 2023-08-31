@@ -156,4 +156,21 @@ Blockchain.prototype.findTransaction = function(transactionId: string): {
     }
 }
 
+Blockchain.prototype.listTransactions = function(address: string): Transaction[] {
+    let balance: number = 0;
+    const transactions: Transaction[] = [];
+    
+    this.chain.forEach((block: Block) =>  {
+        block.data.forEach((transaction: Transaction) => {
+            if (
+                transaction.sender === address || transaction.recipient === address
+            ) {
+                transactions.push(transaction);
+            };
+        });
+    });
+
+    return transactions;
+};
+
 export default Blockchain;
