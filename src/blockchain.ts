@@ -150,7 +150,7 @@ Blockchain.prototype.findTransaction = function(transactionId: string): {
         return null;
     } else {
         const transaction: any = block.data.find(
-            (transactionId) => transaction.transactionId === transactionId
+            (transaction) => transaction.transactionId === transactionId
         );
         return { transaction, block }
     }
