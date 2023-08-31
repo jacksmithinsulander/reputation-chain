@@ -166,13 +166,11 @@ app.get('/api/consensus', (req: Request, res: Response) => {
                 pendingList = data.data.data.pendingList;   
             };
 
-            if (
-                !longestChain || (
-                    longestChain && !reputationChain.calidateChain(
-                        longestChain
-                    )
+            if (!longestChain || (
+                longestChain && !reputationChain.calidateChain(
+                    longestChain
                 )
-            ) {
+            )) {
                console.log('No replacement needed'); 
             } else {
                 reputationChain.chain = longestChain;
