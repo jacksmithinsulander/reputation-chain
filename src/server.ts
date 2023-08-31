@@ -18,25 +18,18 @@ app.get('/api/blockchain', (req: Request, res: Response) => {
 });
 
 app.post('/api/transaction/broadcast', (req: Request, res: Response) => {
-    const transaction: Transaction = reputationChain.addTransaction(
-        req.body.amount, req.body.sender, req.body.recipient
-    );
-    reputationChain.addTransactionToPendingList(transaction);
-    reputationChain.networkNodes.forEach(async(url) => {
-        await axios.post(`${url}/api/transaction`, transaction);
-    })
-    res.status(201).json({
-        success: true, 
-        data: 'Transaction added to mempool'
-    });
-});
-
-app.post('/api/transaction', (req: Request, res: Response) => {
     if (req.body.rating <= 10) {
-        const transaction: Transaction = req.body;
-        const index: Block = reputationChain.
-            addTransactionToPendingList(transaction);
-        res.status(201).json({success: true, data: index})
+        const transaction: Transaction = reputationChain.addTransaction(
+            req.body.amount, req.body.sender, req.body.recipient
+        );
+        reputationChain.addTransactionToPendingList(transaction);
+        reputationChain.networkNodes.forEach(async(url) => {
+            await axios.post(`${url}/api/transaction`, transaction);
+        });
+        res.status(201).json({
+            success: true, 
+            data: 'Transaction added to mempool'
+        });
     } else {
         res.status(404).json({
             status: 404,
@@ -44,6 +37,13 @@ app.post('/api/transaction', (req: Request, res: Response) => {
             data: 'Not a valid ratingnumber'
         })
     }
+});
+
+app.post('/api/transaction', (req: Request, res: Response) => {
+    const transaction: Transaction = req.body;
+    const index: Block = reputationChain.
+        addTransactionToPendingList(transaction);
+    res.status(201).json({success: true, data: index})
 });
 
 app.get('/api/mine', async (req: Request, res: Response) => {
