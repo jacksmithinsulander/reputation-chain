@@ -53,18 +53,9 @@ app.get('/api/mine', async (req: Request, res: Response) => {
     const block: Block = reputationChain.
         createBlock(nonce, previousHash, hash);
 
-    reputationChain.networkNodes.forEach(async(url) => {
+    reputationChain.networkNodes.forEach(async(url: string) => {
         await axios.post(`${url}/api/block`, { block: block });
     });
-
-    await axios.post(
-        `${reputationChain.nodeUrl}/api/transaction/broadcast`,
-        {
-            amount: 4.20,
-            sender: '00',
-            recipient: nodeAddress
-        }
-    );
 
     res.status(200).json({
         success: true,
@@ -98,7 +89,7 @@ app.post('/api/register-broadcast-node', async (req: Request, res: Response) => 
         reputationChain.networkNodes.push(urlToAdd);
     };
 
-    reputationChain.networkNodes.forEach(async(url) => {
+    reputationChain.networkNodes.forEach(async(url: string) => {
         const body = { nodeUrl: urlToAdd };
         await fetch(`${url}/api/register-node`, {
             method: 'POST',
