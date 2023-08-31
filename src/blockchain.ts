@@ -156,7 +156,9 @@ Blockchain.prototype.findTransaction = function(transactionId: string): {
     }
 }
 
-Blockchain.prototype.listTransactions = function(address: string): Transaction[] {
+Blockchain.prototype.listTransactions = function(address: string): {
+    balance: number, transactions: Transaction[]
+} {
     let balance: number = 0;
     const transactions: Transaction[] = [];
     
@@ -170,7 +172,16 @@ Blockchain.prototype.listTransactions = function(address: string): Transaction[]
         });
     });
 
-    return transactions;
+    //this is where I want to implement my system later on
+    transactions.forEach((transaction: Transaction) => {
+        if (transaction.recipient === address) {
+            balance += transaction.amount;
+        } else if (transaction.sender === address) {
+            balance -= transaction.amount;
+        }
+    });
+
+    return { balance, transactions };
 };
 
 export default Blockchain;

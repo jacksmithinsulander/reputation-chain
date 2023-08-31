@@ -212,9 +212,11 @@ app.get('/api/transaction/:id', (req: Request, res: Response) => {
     }
 });
 
-app.gfet('/api/transactions/:address', (req: Request, res: Response) => {
-    const transactions: Transaction[] = reputationChain.listTransactions(req.params.address);
-    res.status(200).json({success:true, data: transactions });
+app.get('/api/transactions/:address', (req: Request, res: Response) => {
+    const result: { 
+        balance: string, transactions: Transaction[] 
+    } = reputationChain.listTransactions(req.params.address);
+    res.status(200).json({success:true, data: result });
 })
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
