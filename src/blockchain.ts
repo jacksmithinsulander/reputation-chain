@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 export type Transaction = { 
     sender: string,
     recipient: string,
-    amount: number,
+    rating: number,
     transactionId: string
 };
 
@@ -49,12 +49,12 @@ Blockchain.prototype.getLastBlock = function(): Block {
 };
 
 Blockchain.prototype.addTransaction = function(
-    amount: number,
+    rating: number,
     sender: string,
     recipient: string
 ): Transaction {
     const newTransaction: Transaction = {
-        amount,
+        rating,
         sender,
         recipient,
         transactionId: uuidv4().split('-').join(''),
@@ -157,9 +157,9 @@ Blockchain.prototype.findTransaction = function(transactionId: string): {
 }
 
 Blockchain.prototype.listTransactions = function(address: string): {
-    balance: number, transactions: Transaction[]
+    score: number, transactions: Transaction[]
 } {
-    let balance: number = 0;
+    let score: number; //= 0;
     const transactions: Transaction[] = [];
     
     this.chain.forEach((block: Block) =>  {
@@ -175,13 +175,13 @@ Blockchain.prototype.listTransactions = function(address: string): {
     //this is where I want to implement my system later on
     transactions.forEach((transaction: Transaction) => {
         if (transaction.recipient === address) {
-            balance += transaction.amount;
+            score += transaction.rating;
         } else if (transaction.sender === address) {
-            balance -= transaction.amount;
+            score -= transaction.rating;
         }
     });
 
-    return { balance, transactions };
+    return { score, transactions};
 };
 
 export default Blockchain;
