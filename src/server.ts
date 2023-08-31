@@ -208,8 +208,13 @@ app.get('/api/transaction/:id', (req: Request, res: Response) => {
             message: 'Transaction not found'
         });
     } else {
-        res.status(200).json({ suxxess: true, data: result });
+        res.status(200).json({ success: true, data: result });
     }
 });
+
+app.gfet('/api/transactions/:address', (req: Request, res: Response) => {
+    const transactions: Transaction[] = reputationChain.listTransactions(req.params.address);
+    res.status(200).json({success:true, data: transactions });
+})
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
