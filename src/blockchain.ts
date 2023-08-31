@@ -133,4 +133,27 @@ Blockchain.prototype.validateChain = function (blockchain: any): boolean {
     return isValid;
 };
 
+Blockchain.prototype.findBlock = function(blockHash: string): Block {
+    return this.chain.find((block: Block) => block.hash === blockHash);
+};
+
+Blockchain.prototype.findTransaction = function(transactionId: string): { 
+    transaction: Transaction,
+    block: Block 
+} {
+    const block: Block = this.chain.find(
+        (block: Block) => block.data.find(
+            transaction => transaction.transactionId === transactionId
+        )
+    );
+    if (!block) {
+        return null;
+    } else {
+        const transaction: any = block.data.find(
+            (transactionId) => transaction.transactionId === transactionId
+        );
+        return { transaction, block }
+    }
+}
+
 export default Blockchain;

@@ -168,17 +168,29 @@ app.get('/api/consensus', (req: Request, res: Response) => {
             };
 
             if (
-                !longestChain || 
-                (
+                !longestChain || (
                     longestChain && !reputationChain.calidateChain(
                         longestChain
                     )
                 )
             ) {
                console.log('No replacement needed'); 
-            }
+            } else {
+                reputationChain.chain = longestChain;
+                reputationChain.pendingList = pendingList;
+                res.status(200).json({ success: true, data: reputationChain });
+            };
         });
     });
+});
+
+app.get('/api/block/:hash', (req: Request, res: Response) => {
+    const block: Block = reputationChain.findBlock(req.params.hash);
+    if (!block) {
+        res.status(404).json({ success: false, data: 'Block not found'});
+    } else {
+        res.status(200).json({ success: true, data: block });
+    }
 });
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
