@@ -187,9 +187,28 @@ app.get('/api/consensus', (req: Request, res: Response) => {
 app.get('/api/block/:hash', (req: Request, res: Response) => {
     const block: Block = reputationChain.findBlock(req.params.hash);
     if (!block) {
-        res.status(404).json({ success: false, data: 'Block not found'});
+        res.status(404).json({
+            status: 404, 
+            success: false, 
+            data: 'Block not found'
+        });
     } else {
         res.status(200).json({ success: true, data: block });
+    }
+});
+
+app.get('/api/transaction/:id', (req: Request, res: Response) => {
+    const result: { 
+        transaction: Transaction, block: Block 
+    } = reputationChain.findTransaction(req.params.id);
+    if (!result) {
+        res.status(404).json({ 
+            status: 404, 
+            success: false, 
+            message: 'Transaction not found'
+        });
+    } else {
+        res.status(200).json({ suxxess: true, data: result });
     }
 });
 
