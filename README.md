@@ -9,18 +9,29 @@ npm run build
 ## Get:
 
 /api/v1/blockchain
+
 /api/v1/blockchain/mine-block
+
 /api/v1/block/:hash
+
 /api/v1/transaction/:id
+
 /api/v1/transactions/:address
+
 /api/v1/consensus
+
 /api/v1/query/:address
 
 ## Post:
 
 /api/v1/block
+
 /api/v1/transaction
+
 /api/v1/transaction/broadcast
+
 /api/v1/node
+
 /api/v1/node/register-node
+
 /api/v1/node/register-nodes
