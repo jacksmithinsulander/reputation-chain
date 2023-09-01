@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 //import { v4 as uuidv4 } from 'uuid';
-import Blockchain, { Block, Transaction } from './blockchain.js';
+import Blockchain, { Block, Transaction } from './models/blockchain.js';
 import axios from 'axios';
 
 const app = express();
