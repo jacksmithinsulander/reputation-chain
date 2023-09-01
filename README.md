@@ -41,9 +41,11 @@ npm run build
 The transaction format follows this form: 
 
 ```
-    "rating": 10,
+{
+    "amount": 2,
     "sender": "Vitalik",
     "recipient": "Satoshi"
+}
 ```
 
 The "rating" has to be a number between 0 - 10, since I'd like my social credit score system to be readable in a x / 10 format in the future
