@@ -8,6 +8,6 @@ const PORT: number = parseInt(process.argv[2], 10);
 
 app.use(express.json());
 
-app.use('/api/v1/blockchain', null);
+app.use('/api/v1/blockchain', blockchain);
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
