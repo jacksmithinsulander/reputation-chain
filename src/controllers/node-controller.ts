@@ -41,7 +41,7 @@ export const addNode = (req: Request, res: Response) => {
         reputationChain.networkNodes.push(url);
     };
     
-    res.status(201).json({ success: true, data: 'New nodes added' });
+    res.status(201).json({ success: true, data: 'New node added' });
 };
 
 export const addNodes = (req: Request, res: Response) => {
@@ -55,5 +55,5 @@ export const addNodes = (req: Request, res: Response) => {
             reputationChain.networkNodes.push(url);
         }
     });  
-    res.status(201).json({ success: true, data: 'Nya noder tillagda' });
+    res.status(201).json({ success: true, data: 'New nodes added' });
 };
