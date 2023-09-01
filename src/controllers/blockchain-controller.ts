@@ -8,7 +8,3 @@ export const getBlockchain = (req: Request, res: Response) => {
 export const mineBlock = (req: Request, res: Response) => {
     res.status(200).json({ success: true, data: 'Block is mined' });
 };
-
-export const addBlock = (req: Request, res: Response) => {
-    res.status(200).json({ success: true, data: 'Block added'})
-}
