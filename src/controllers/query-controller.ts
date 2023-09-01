@@ -6,4 +6,4 @@ export const getSocialCredit = (req: Request, res: Response) => {
         socialCredit: string, transactions: Transaction[] 
     } = reputationChain.listTransactions(req.params.address);
     res.status(200).json({success:true, data: result.socialCredit });
-}
+};
