@@ -7,6 +7,6 @@ export const getSocialCredit = (req: Request, res: Response) => {
     } = reputationChain.listTransactions(req.params.address);
     res.status(200).json({
         success:true, 
-        data: `${req.params.address}'s social credit score: ${result.socialCredit}` 
+        data: `${req.params.address}'s social credit score: ${result.socialCredit} / 10` 
     });
 };
