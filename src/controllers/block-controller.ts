@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { reputationChain, Block, Transaction } from '../utilities/starter.js';
+import { reputationChain, Block } from '../utilities/starter.js';
 
 export const addBlock = (req: Request, res: Response) => {
     const block: Block = req.body.block;
