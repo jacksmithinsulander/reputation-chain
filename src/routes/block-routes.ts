@@ -1,8 +1,9 @@
 import express from 'express';
-import { addBlock } from '../controllers/block-controller.js';
+import { addBlock, findBlock } from '../controllers/block-controller.js';
 
 const router = express.Router();
 
-router.route('/block').post(addBlock);
+router.route('/:hash').get(findBlock);
+router.route('/').post(addBlock);
 
 export default router;
