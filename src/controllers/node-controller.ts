@@ -24,7 +24,7 @@ export const broadcastNode = async (req: Request, res: Response) => {
         ]
     };
 
-    await axios.post(`${urlToAdd}/api/register-nodes`, body, {
+    await axios.post(`${urlToAdd}/api/v1/node/register-nodes`, body, {
         headers: {'Content-Type': 'application/json'}
     });
 

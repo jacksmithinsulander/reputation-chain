@@ -24,7 +24,7 @@ export const mineBlock = async (req: Request, res: Response) => {
         createBlock(nonce, previousHash, hash);
 
     reputationChain.networkNodes.forEach(async(url: string) => {
-        await axios.post(`${url}/api/block`, { block: block });
+        await axios.post(`${url}/api/v1/block`, { block: block });
     });
 
     res.status(200).json({

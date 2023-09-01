@@ -10,7 +10,7 @@ export const syncronize = (req: Request, res: Response) => {
 
     reputationChain.networkNodes.forEach((node: any) => {
         console.log('Node: ', node);
-        axios(`${node}/api/blockchain`).then(data => {
+        axios(`${node}/api/v1/blockchain`).then(data => {
             console.log('Data from axios: ', data);
             res.status(201).json({ success: true, data: 'Working' });
             if (data.data.data.chain.length > maxLength) {
