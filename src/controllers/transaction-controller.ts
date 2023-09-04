@@ -15,7 +15,7 @@ export const broadcastTransaction = (req: Request, res: Response) => {
             req.body.rating, req.body.sender, req.body.recipient
         );
         reputationChain.addTransactionToPendingList(transaction);
-        reputationChain.networkNodes.forEach(async(url: string) => {
+        reputationChain.networkNodes.forEach(async(url) => {
             await axios.post(`${url}/api/v1/transaction`, transaction);
         });
         res.status(201).json({
